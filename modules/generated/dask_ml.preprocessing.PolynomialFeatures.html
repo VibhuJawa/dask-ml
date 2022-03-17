@@ -31,7 +31,7 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="dask_ml.preprocessing.BlockTransformer" href="dask_ml.preprocessing.BlockTransformer.html" />
@@ -91,7 +91,12 @@
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
@@ -697,22 +702,22 @@
 
 
           
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
     <div class="topbar container-xl fixed-top">
     <div class="topbar-contents row">
         <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
         <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
             
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
@@ -727,7 +732,7 @@
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -745,14 +750,24 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
         </div>
     </div>
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>dask_ml.preprocessing.PolynomialFeatures</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="section" id="dask-ml-preprocessing-polynomialfeatures">
@@ -771,16 +786,14 @@ For example, if an input sample is two dimensional and of the form
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>degree</strong><span class="classifier">int or tuple (min_degree, max_degree), default=2</span></dt><dd><blockquote>
-<div><p>If a single int is given, it specifies the maximal degree of the
+<dt><strong>degree</strong><span class="classifier">int or tuple (min_degree, max_degree), default=2</span></dt><dd><p>If a single int is given, it specifies the maximal degree of the
 polynomial features. If a tuple <cite>(min_degree, max_degree)</cite> is passed,
 then <cite>min_degree</cite> is the minimum and <cite>max_degree</cite> is the maximum
 polynomial degree of the generated features. Note that <cite>min_degree=0</cite>
 and <cite>min_degree=1</cite> are equivalent as outputting the degree zero term is
 determined by <cite>include_bias</cite>.</p>
-</div></blockquote>
-<dl>
-<dt>interaction_only<span class="classifier">bool, default=False</span></dt><dd><p>If <cite>True</cite>, only interaction features are produced: features that are
+</dd>
+<dt><strong>interaction_only</strong><span class="classifier">bool, default=False</span></dt><dd><p>If <cite>True</cite>, only interaction features are produced: features that are
 products of at most <cite>degree</cite> <em>distinct</em> input features, i.e. terms with
 power of 2 or higher of the same input feature are excluded:</p>
 <blockquote>
@@ -790,11 +803,11 @@ power of 2 or higher of the same input feature are excluded:</p>
 </ul>
 </div></blockquote>
 </dd>
-<dt>include_bias<span class="classifier">bool, default=True</span></dt><dd><p>If <cite>True</cite> (default), then include a bias column, the feature in which
+<dt><strong>include_bias</strong><span class="classifier">bool, default=True</span></dt><dd><p>If <cite>True</cite> (default), then include a bias column, the feature in which
 all polynomial powers are zero (i.e. a column of ones - acts as an
 intercept term in a linear model).</p>
 </dd>
-<dt>order<span class="classifier">{‘C’, ‘F’}, default=’C’</span></dt><dd><p>Order of output array in the dense case. <cite>‘F’</cite> order is faster to
+<dt><strong>order</strong><span class="classifier">{‘C’, ‘F’}, default=’C’</span></dt><dd><p>Order of output array in the dense case. <cite>‘F’</cite> order is faster to
 compute, but may slow down subsequent estimators.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.21.</span></p>
@@ -802,11 +815,26 @@ compute, but may slow down subsequent estimators.</p>
 </dd>
 </dl>
 </dd>
-</dl>
-</dd>
 <dt class="field-even">Attributes</dt>
 <dd class="field-even"><dl>
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">powers_</span></code><span class="classifier">ndarray of shape (<cite>n_output_features_</cite>, <cite>n_features_in_</cite>)</span></dt><dd><p>Exponent for each of the inputs in the output.</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_input_features_</span></code><span class="classifier">int</span></dt><dd><p>DEPRECATED: The attribute <cite>n_input_features_</cite> was deprecated in version 1.0 and will be removed in 1.2.</p>
+</dd>
+<dt><strong>n_features_in_</strong><span class="classifier">int</span></dt><dd><p>Number of features seen during <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-fit" title="(in scikit-learn v1.0)"><span class="xref std std-term">fit</span></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.24.</span></p>
+</div>
+</dd>
+<dt><strong>feature_names_in_</strong><span class="classifier">ndarray of shape (<cite>n_features_in_</cite>,)</span></dt><dd><p>Names of features seen during <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-fit" title="(in scikit-learn v1.0)"><span class="xref std std-term">fit</span></a>. Defined only when <cite>X</cite>
+has feature names that are all strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+</dd>
+<dt><strong>n_output_features_</strong><span class="classifier">int</span></dt><dd><p>The total number of polynomial output features. The number of output
+features is computed by iterating over all suitably sized combinations
+of input features.</p>
 </dd>
 </dl>
 </dd>
@@ -886,8 +914,8 @@ sklearn’s default behaviour</p>
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="dask_ml.preprocessing.LabelEncoder.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -904,19 +932,17 @@ sklearn’s default behaviour</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Dask developers<br/>
-        
-            &copy; Copyright 2017, Dask developers.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Dask developers<br/>
+    
+        &copy; Copyright 2017, Dask developers.<br/>
+  </p>
+</footer>
 </main>
 
 
